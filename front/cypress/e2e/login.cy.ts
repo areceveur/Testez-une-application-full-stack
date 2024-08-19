@@ -41,7 +41,7 @@ describe('Login spec', () => {
     cy.get('.error').should('be.visible').and('contain', 'An error occurred');
   });
 
-  it('Shows error and disable submit button if required fields are missing', () => {
+  it('Disable submit button if required fields are missing', () => {
     cy.visit('/login');
     cy.get('input[formControlName=email]').clear();
     cy.get('input[formControlName=password]').clear();

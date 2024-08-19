@@ -36,11 +36,6 @@ public class WebSecurityConfig {
     return new AuthTokenFilter();
   }
 
-//  @Autowired
-//  public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-//  }
-
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
     return authConfig.getAuthenticationManager();
