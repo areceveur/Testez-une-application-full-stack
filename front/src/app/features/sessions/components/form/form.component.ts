@@ -6,6 +6,7 @@ import { SessionService } from '../../../../services/session.service';
 import { TeacherService } from '../../../../services/teacher.service';
 import { Session } from '../../interfaces/session.interface';
 import { SessionApiService } from '../../services/session-api.service';
+import { NgZone } from '@angular/core';
 
 @Component({
   selector: 'app-form',
@@ -26,7 +27,8 @@ export class FormComponent implements OnInit {
     private sessionApiService: SessionApiService,
     private sessionService: SessionService,
     private teacherService: TeacherService,
-    private router: Router
+    private router: Router,
+    private ngZone: NgZone
   ) {
   }
 
@@ -86,6 +88,8 @@ export class FormComponent implements OnInit {
 
   private exitPage(message: string): void {
     this.matSnackBar.open(message, 'Close', { duration: 3000 });
-    this.router.navigate(['sessions']);
+    this.ngZone.run(() => {
+      this.router.navigate(['sessions']);
+    });
   }
 }
