@@ -34,6 +34,9 @@ describe('FormComponent', () => {
   };
 
   beforeEach(async () => {
+    window.addEventListener('unhandledrejection', event => {
+      fail(event.reason);
+    });
     mockSessionApiService = {
       create: jest.fn().mockReturnValue(of({success: true })),
       update: jest.fn(),
@@ -77,7 +80,7 @@ describe('FormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should create a session', () => {
+  it('should create a session', async () => {
     fixture.detectChanges();
     component.sessionForm?.controls['name'].setValue('Yoga');
     component.sessionForm?.controls['date'].setValue('2024-07-15');
@@ -89,5 +92,20 @@ describe('FormComponent', () => {
       expect(mockSessionApiService.create).toHaveBeenCalledWith(component.sessionForm?.value)
     });
     expect(mockMatSnackBar.open).toHaveBeenCalledWith('Session created !', 'Close', { duration : 3000})
-  })
+  });
+
+  it('should update a session', async () => {
+    fixture.detectChanges();
+    component.onUpdate = true;
+    component.id = '1';
+
+    component.sessionForm?.setValue({ name: 'Updated Session', date: '2023-01-02', teacher_id: 2, description: 'Updated description' });
+    mockSessionApiService.update.mockReturnValue(of({ name: 'Updated Session' }));
+    component.submit();
+
+    fixture.whenStable().then(() => {
+      expect(mockSessionApiService.update).toHaveBeenCalledWith('1', component.sessionForm?.value)
+      expect(mockMatSnackBar.open).toHaveBeenCalledWith('Session updated !', 'Close', { duration: 3000 });
+    });
+  });
 });

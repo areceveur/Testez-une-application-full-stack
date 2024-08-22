@@ -1,9 +1,21 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "isolatedModules": false
+    "isolatedModules": false,
+    "target": "es6",
+    "module": "commonjs",
+    "types": ["cypress"],
+    "typeRoots": ["./node_modules/@types"],
+    "strict": true,
+    "esModuleInterop": true
   },
   "include": [
-    "../node_modules/cypress"
+    "../node_modules/cypress",
+    "cypress/**/*.ts",
+    "cypress/**/*.js",
+    "cypress/support/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

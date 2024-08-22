@@ -18,7 +18,14 @@ export class FormComponent implements OnInit {
   public onUpdate: boolean = false;
   public sessionForm: FormGroup | undefined;
   public teachers$ = this.teacherService.all();
-  private id: string | undefined;
+  private _id: string | undefined;
+
+  public get id(): string | undefined {
+    return this._id;
+  };
+  public set id(value: string | undefined)  {
+    this._id = value;
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -28,8 +35,7 @@ export class FormComponent implements OnInit {
     private sessionService: SessionService,
     private teacherService: TeacherService,
     private router: Router,
-    private ngZone: NgZone
-  ) {
+    private ngZone: NgZone ) {
   }
 
   public ngOnInit(): void {

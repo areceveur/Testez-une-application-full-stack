@@ -14,4 +14,62 @@ describe('SessionService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should log in the user', () => {
+    const sessionInfo = {
+      token: '',
+      type: 'Bearer',
+      id: 1,
+      username: 'testUser',
+      firstName: 'Test',
+      lastName: 'User',
+      admin: false
+    };
+    service.logIn(sessionInfo);
+
+    expect(service.sessionInformation).toEqual(sessionInfo);
+    expect(service.isLogged).toBe(true);
+  });
+
+  it('should log out the user', () => {
+    const sessionInfo = {
+      token: '',
+      type: 'Bearer',
+      id: 1,
+      username: 'testUser',
+      firstName: 'Test',
+      lastName: 'User',
+      admin: false
+    };
+    service.logIn(sessionInfo);
+    service.logOut();
+
+    expect(service.sessionInformation).toBeUndefined();
+    expect(service.isLogged).toBe(false);
+  });
+
+  it('should update $isLogged observable when logging in and out', (done) => {
+    let loggedStates: boolean[] = [];
+
+    service.$isLogged().subscribe((isLogged) => {
+      loggedStates.push(isLogged);
+
+      // Une fois que les trois états sont capturés, on fait les vérifications
+      if (loggedStates.length === 3) {
+        expect(loggedStates).toEqual([false, true, false]);
+        done();
+      }
+    });
+
+    service.logIn({
+      token: '',
+      type: 'Bearer',
+      id: 1,
+      username: 'testUser',
+      firstName: 'Test',
+      lastName: 'User',
+      admin: false
+    });
+    service.logOut();
+  });
 });
