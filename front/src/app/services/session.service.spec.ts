@@ -54,7 +54,6 @@ describe('SessionService', () => {
     service.$isLogged().subscribe((isLogged) => {
       loggedStates.push(isLogged);
 
-      // Une fois que les trois états sont capturés, on fait les vérifications
       if (loggedStates.length === 3) {
         expect(loggedStates).toEqual([false, true, false]);
         done();

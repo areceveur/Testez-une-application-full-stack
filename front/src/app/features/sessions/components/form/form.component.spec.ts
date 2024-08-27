@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -99,7 +99,13 @@ describe('FormComponent', () => {
     component.onUpdate = true;
     component.id = '1';
 
-    component.sessionForm?.setValue({ name: 'Updated Session', date: '2023-01-02', teacher_id: 2, description: 'Updated description' });
+    component.sessionForm?.setValue({
+      name: 'Updated Session',
+      date: '2023-01-02',
+      teacher_id: 2,
+      description: 'Updated description'
+    });
+
     mockSessionApiService.update.mockReturnValue(of({ name: 'Updated Session' }));
     component.submit();
 
@@ -107,5 +113,40 @@ describe('FormComponent', () => {
       expect(mockSessionApiService.update).toHaveBeenCalledWith('1', component.sessionForm?.value)
       expect(mockMatSnackBar.open).toHaveBeenCalledWith('Session updated !', 'Close', { duration: 3000 });
     });
+  });
+
+  it('should redirect non-admin users', () => {
+    mockSessionService.sessionInformation.admin = false;
+    const navigateSpy = jest.spyOn(component['router'], 'navigate');
+
+    component.ngOnInit();
+    expect(navigateSpy).toHaveBeenCalledWith(['/sessions']);
+  });
+
+  it('should display the information for the update', () => {
+    mockSessionService.sessionInformation.admin = true;
+    const mockSession = {
+      name: 'Updated Session',
+      date: '2023-01-02',
+      teacher_id: 2,
+      description: 'Updated description'
+    };
+
+    jest.spyOn(component['router'], 'url', 'get').mockReturnValue('/sessions/update/1');
+    mockSessionApiService.detail.mockReturnValue(of(mockSession));
+    jest.spyOn(component['route'].snapshot.paramMap, 'get').mockReturnValue('1');
+
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    expect(component.onUpdate).toBeTruthy();
+    expect(component.id).toBe('1');
+    expect(mockSessionApiService.detail).toHaveBeenCalledWith('1');
+    expect(component.sessionForm?.value).toEqual({
+      name: 'Updated Session',
+      date: '2023-01-02',
+      teacher_id: 2,
+      description: 'Updated description'
+    })
   });
 });

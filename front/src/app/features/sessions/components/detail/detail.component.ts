@@ -23,6 +23,8 @@ export class DetailComponent implements OnInit {
   public sessionId: string;
   public userId: string;
 
+  private isFetching = false;
+
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -63,6 +65,11 @@ export class DetailComponent implements OnInit {
   }
 
   private fetchSession(): void {
+    if(this.isFetching) {
+      return;
+    }
+    this.isFetching = true;
+
     this.sessionApiService
       .detail(this.sessionId)
       .subscribe((session: Session) => {
@@ -70,7 +77,10 @@ export class DetailComponent implements OnInit {
         this.isParticipate = session.users.some(u => u === this.sessionService.sessionInformation!.id);
         this.teacherService
           .detail(session.teacher_id.toString())
-          .subscribe((teacher: Teacher) => this.teacher = teacher);
+          .subscribe((teacher: Teacher) => {
+            this.teacher = teacher;
+            this.isFetching = false;
+          });
       });
   }
 

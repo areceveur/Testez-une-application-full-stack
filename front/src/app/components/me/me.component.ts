@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { User } from '../../interfaces/user.interface';
 import { SessionService } from '../../services/session.service';
 import { UserService } from '../../services/user.service';
+import { NgZone } from '@angular/core';
 
 @Component({
   selector: 'app-me',
@@ -17,7 +18,8 @@ export class MeComponent implements OnInit {
   constructor(private router: Router,
               private sessionService: SessionService,
               private matSnackBar: MatSnackBar,
-              private userService: UserService) {
+              private userService: UserService,
+              private ngZone: NgZone) {
   }
 
   public ngOnInit(): void {
@@ -36,7 +38,10 @@ export class MeComponent implements OnInit {
       .subscribe((_) => {
         this.matSnackBar.open("Your account has been deleted !", 'Close', { duration: 3000 });
         this.sessionService.logOut();
-        this.router.navigate(['/']);
+        this.ngZone.run(() => {
+          this.router.navigate(['/']);
+        })
+
       })
   }
 

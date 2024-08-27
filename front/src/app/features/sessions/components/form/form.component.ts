@@ -40,7 +40,9 @@ export class FormComponent implements OnInit {
 
   public ngOnInit(): void {
     if (!this.sessionService.sessionInformation!.admin) {
-      this.router.navigate(['/sessions']);
+      this.ngZone.run(() => {
+        this.router.navigate(['/sessions']);
+      })
     }
     const url = this.router.url;
     if (url.includes('update')) {
