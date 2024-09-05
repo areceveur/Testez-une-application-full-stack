@@ -10,6 +10,9 @@ public class MessageResponseTest {
     @Test
     public void getMessageTest() {
         MessageResponse messageResponse = new MessageResponse("Session created");
+        messageResponse.setMessage("Session created");
         assertNotNull(messageResponse.getMessage());
     }
+
+
 }

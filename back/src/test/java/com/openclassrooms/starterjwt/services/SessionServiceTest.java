@@ -1,5 +1,7 @@
 package com.openclassrooms.starterjwt.services;
 
+import com.openclassrooms.starterjwt.exception.BadRequestException;
+import com.openclassrooms.starterjwt.exception.NotFoundException;
 import com.openclassrooms.starterjwt.models.Session;
 import com.openclassrooms.starterjwt.models.User;
 import com.openclassrooms.starterjwt.repository.SessionRepository;
@@ -7,13 +9,16 @@ import com.openclassrooms.starterjwt.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @Transactional
@@ -25,10 +30,10 @@ public class SessionServiceTest {
     @Autowired
     private UserService userService;
 
-    @Autowired
+    @Mock
     private UserRepository userRepository;
 
-    @Autowired
+    @Mock
     private SessionRepository sessionRepository;
 
     @BeforeEach
@@ -100,7 +105,10 @@ public class SessionServiceTest {
 
         List<Session> expectedSessions = Arrays.asList(createdSession1, createdSession2);
 
-        assertFalse(expectedSessions.isEmpty());
+        when(sessionRepository.findAll()).thenReturn(expectedSessions);
+
+        List<Session> result = sessionService.findAll();
+        assertNotNull(result);
     }
 
     @Test
@@ -149,5 +157,65 @@ public class SessionServiceTest {
         assertNotNull(createdUser.getId());
 
         sessionService.participate(createdSession.getId(), createdUser.getId());
+    }
+
+    @Test
+    public void participateTest_NotFoundException() {
+        Long id = 2L;
+        Long userId = 3L;
+
+        when(sessionRepository.findById(id)).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class, () -> {
+            sessionService.participate(id, userId);
+        });
+
+        verify(sessionRepository, never()).save(any(Session.class));
+    }
+
+    @Test
+    public void noLongerParticipateTest_NotFoundException() {
+        Long id = 1L;
+        Long userId = 1L;
+
+        when(sessionRepository.findById(id)).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class, () -> {
+            sessionService.noLongerParticipate(id, userId);
+        });
+        verify(sessionRepository, never()).save(any(Session.class));
+    }
+
+    @Test
+    public void noLongerParticipateTest_BadRequest() {
+        Long id = 2L;
+        Long userId = 3L;
+
+        when(sessionRepository.findById(id)).thenReturn(Optional.empty());
+        assertThrows(BadRequestException.class, () -> {
+            sessionService.noLongerParticipate(id, userId);
+        });
+
+        verify(sessionRepository, never()).save(any(Session.class));
+    }
+
+    @Test
+    public void noLongerParticipateTest() {
+        Long id = 3L;
+        Long userId = 4L;
+
+        User user = new User();
+        user.setId(userId);
+
+        Session session = new Session();
+        session.setId(id);
+        session.setUsers(Arrays.asList(user));
+        session.setDate(new Date());
+        session.setName("Yoga");
+        session.setDescription("Session de yoga");
+
+        Session createdSession = sessionService.create(session);
+
+        when(sessionRepository.findById(id)).thenReturn(Optional.of(session));
+        sessionService.noLongerParticipate(createdSession.getId(), userId);
+        assertTrue(createdSession.getUsers().isEmpty());
     }
 }

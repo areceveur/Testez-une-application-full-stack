@@ -34,8 +34,8 @@ public class JwtUtilsTest {
                 .id(1L)
                 .username("testUser")
                 .password("testPassword")
-                .firstName("John")
-                .lastName("Doe")
+                .firstName("Test")
+                .lastName("User")
                 .admin(false)
                 .build();
         when(authentication.getPrincipal()).thenReturn(userDetails);
@@ -60,7 +60,6 @@ public class JwtUtilsTest {
     public void validateJwtToken_ExpiredToken() throws InterruptedException {
         String expiredToken = Jwts.builder()
                 .setSubject((userDetails.getUsername()))
-                .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() - 1000))
                 .signWith(SignatureAlgorithm.HS512, "testSecret")
                 .compact();

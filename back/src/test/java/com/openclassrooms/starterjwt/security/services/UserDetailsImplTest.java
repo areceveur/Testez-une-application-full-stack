@@ -1,5 +1,6 @@
 package com.openclassrooms.starterjwt.security.services;
 
+import com.openclassrooms.starterjwt.dto.UserDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.GrantedAuthority;
@@ -58,6 +59,38 @@ public class UserDetailsImplTest {
                 .password("test!1234")
                 .build();
         assertEquals("test!1234", userDetails.getPassword());
+    }
+
+    @Test
+    public void getFirstNameTest() {
+        UserDetailsImpl userDetails = UserDetailsImpl.builder()
+                .firstName("Test")
+                .build();
+        assertEquals("Test", userDetails.getFirstName());
+    }
+
+    @Test
+    public void getLastNameTest() {
+        UserDetailsImpl userDetails = UserDetailsImpl.builder()
+                .lastName("User")
+                .build();
+        assertEquals("User", userDetails.getLastName());
+    }
+
+    @Test
+    public void getIdTest() {
+        UserDetailsImpl userDetails = UserDetailsImpl.builder()
+                .id(1L)
+                .build();
+        assertEquals(1L, userDetails.getId());
+    }
+
+    @Test
+    public void getAdminTest() {
+        UserDetailsImpl userDetails = UserDetailsImpl.builder()
+                .admin(false)
+                .build();
+        assertEquals(false, userDetails.getAdmin());
     }
 
     @Test
