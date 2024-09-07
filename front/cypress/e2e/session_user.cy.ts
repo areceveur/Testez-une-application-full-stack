@@ -38,4 +38,13 @@ describe('Session list creation', () => {
     cy.contains("button", "back").click()
   })
 
+  it('Should display the account session', () => {
+    cy.get('mat-toolbar').contains('Account').click();
+  })
+
+  it('Should delete the account', () => {
+    cy.contains("button", "Delete").should('be.visible');
+    cy.contains("button", "Delete").click();
+  })
+
 })

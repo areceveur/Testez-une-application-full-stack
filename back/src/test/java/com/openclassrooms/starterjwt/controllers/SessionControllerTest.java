@@ -89,7 +89,7 @@ public class SessionControllerTest {
         session1.setId(2L);
 
         Session session2 = new Session();
-        session2.setId(65L);
+        session2.setId(149L);
 
         List<Session> sessions = new ArrayList<>();
         sessions.add(session1);
@@ -107,18 +107,18 @@ public class SessionControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(2))
-                .andExpect(jsonPath("$[1].id").value(69));
+                .andExpect(jsonPath("$[1].id").value(149));
     }
 
     @WithMockUser()
     @Test
     public void saveSessionTest() throws Exception {
         Session session = new Session();
-        session.setId(69L);
+        session.setId(149L);
 
-        when(sessionService.getById(68L)).thenReturn(session);
+        when(sessionService.getById(149L)).thenReturn(session);
 
-        mockMvc.perform(delete("/api/session/69")
+        mockMvc.perform(delete("/api/session/149")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -145,14 +145,14 @@ public class SessionControllerTest {
     @Test
     public void createTest() throws Exception {
         SessionDto sessionDto = new SessionDto();
-        sessionDto.setId(70L);
+        //sessionDto.setId(70L);
         sessionDto.setTeacher_id(1L);
         sessionDto.setDescription("Session");
         sessionDto.setDate(new Date());
         sessionDto.setName("Yoga");
 
         Session session = new Session();
-        session.setId(70L);
+        //session.setId(151L);
         session.setDescription("Session");
         session.setDate(new Date());
         session.setName("Yoga");
@@ -164,7 +164,7 @@ public class SessionControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(sessionDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(70L));
+                .andExpect(jsonPath("$.id").value(160L));
     }
 
     @WithMockUser()
@@ -178,20 +178,20 @@ public class SessionControllerTest {
         sessionDto.setName("Yoga");
 
         Session updateSession = new Session();
-        updateSession.setId(70L);
+        //updateSession.setId(70L);
         updateSession.setDescription("Session update");
         updateSession.setDate(new Date());
         updateSession.setName("Yoga");
 
         when(sessionMapper.toEntity(sessionDto)).thenReturn(updateSession);
-        when(sessionService.update(70L, updateSession)).thenReturn(updateSession);
+        when(sessionService.update(153L, updateSession)).thenReturn(updateSession);
         when(sessionMapper.toDto(updateSession)).thenReturn(sessionDto);
 
-        mockMvc.perform(put("/api/session/70")
+        mockMvc.perform(put("/api/session/153")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(sessionDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(70L))
+                .andExpect(jsonPath("$.id").value(153L))
                 .andExpect(jsonPath("$.description").value("Session update"))
                 .andExpect(jsonPath("$.name").value("Yoga"));
     }
@@ -204,15 +204,15 @@ public class SessionControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    @WithMockUser("yoga@studio.com")
+    @WithMockUser("test@user.com")
     @Test
     public void participateTest() throws Exception {
         Long sessionId = 2L;
-        Long userId = 4L;
+        Long userId = 5L;
 
         doNothing().when(sessionService).participate(anyLong(), anyLong());
 
-        mockMvc.perform(post("/api/session/2/participate/4", sessionId, userId)
+        mockMvc.perform(post("/api/session/2/participate/5", sessionId, userId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -220,8 +220,8 @@ public class SessionControllerTest {
     @WithMockUser("yoga@studio.com")
     @Test
     public void participate_BadRequestTest() throws Exception {
-        String sessionId = "invalidId";
-        Long userId = 4L;
+        Long sessionId = 2L;
+        String userId = "invalidId";
 
         doNothing().when(sessionService).participate(anyLong(), anyLong());
 
@@ -234,11 +234,11 @@ public class SessionControllerTest {
     @Test
     public void deleteTest() throws Exception {
         Long sessionId = 2L;
-        Long userId = 4L;
+        Long userId = 5L;
 
         doNothing().when(sessionService).noLongerParticipate(anyLong(), anyLong());
 
-        mockMvc.perform(delete("/api/session/2/participate/4", sessionId, userId)
+        mockMvc.perform(delete("/api/session/2/participate/5", sessionId, userId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

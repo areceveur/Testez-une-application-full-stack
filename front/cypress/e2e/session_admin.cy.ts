@@ -67,4 +67,11 @@ describe('Session list creation', () => {
     cy.contains("button", "Delete").click();
   })
 
+  it('Should display the account session', () => {
+    cy.get('mat-toolbar').contains('Account').click();
+  })
+
+  it('Should test the back button of the account session', () => {
+    cy.get('button').contains('arrow_back').click()
+  })
 })

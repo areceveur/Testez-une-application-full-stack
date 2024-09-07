@@ -27,7 +27,7 @@ public class SessionServiceTest {
     @Autowired
     private SessionService sessionService;
 
-    @Autowired
+    @Mock
     private UserService userService;
 
     @Mock
@@ -139,6 +139,7 @@ public class SessionServiceTest {
         session.setDate(new Date());
 
         User user = new User();
+        user.setId(42L);
         user.setLastName("User");
         user.setFirstName("Test");
         user.setEmail("user@test.com");
@@ -147,6 +148,10 @@ public class SessionServiceTest {
         List<User> users = new ArrayList<>();
         session.setUsers(users);
 
+        when(sessionRepository.save(any(Session.class))).thenReturn(session);
+        when(userRepository.save(any(User.class))).thenReturn(user);
+        when(sessionRepository.findById(session.getId())).thenReturn(Optional.of(session));
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
 
         Session createdSession = sessionService.create(session);
         User createdUser = userRepository.save(user);
@@ -156,7 +161,7 @@ public class SessionServiceTest {
         assertNotNull(createdUser);
         assertNotNull(createdUser.getId());
 
-        sessionService.participate(createdSession.getId(), createdUser.getId());
+        sessionService.participate(createdSession.getId(), 4L);
     }
 
     @Test

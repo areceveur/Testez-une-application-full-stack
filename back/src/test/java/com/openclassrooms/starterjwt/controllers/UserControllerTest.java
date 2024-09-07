@@ -92,9 +92,9 @@ public class UserControllerTest {
         User user = new User();
         user.setEmail("user@test.com");
 
-        when(userService.findById(3L)).thenReturn(user);
+        when(userService.findById(4L)).thenReturn(user);
 
-        mockMvc.perform(delete("/api/user/3")
+        mockMvc.perform(delete("/api/user/4")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
