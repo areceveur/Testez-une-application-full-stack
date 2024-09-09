@@ -12,7 +12,7 @@
     "e2e:coverage": "npx nyc report --reporter=lcov --reporter=text-summary",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "cypress:coverage": "nyc --reporter=lcov --reporter=text-summary cypress run"
+    "cypress:coverage": "npx nyc --reporter=lcov --reporter=text-summary cypress run"
   },
   "private": true,
   "dependencies": {

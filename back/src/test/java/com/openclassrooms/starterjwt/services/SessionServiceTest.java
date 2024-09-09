@@ -138,7 +138,6 @@ public class SessionServiceTest {
         session.setDate(new Date());
 
         User user = new User();
-        user.setId(42L);
         user.setLastName("User");
         user.setFirstName("Test");
         user.setEmail("user@test.com");
