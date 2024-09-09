@@ -11,7 +11,8 @@
     "e2e:ci": "ng run yoga:e2e-ci",
     "e2e:coverage": "npx nyc report --reporter=lcov --reporter=text-summary",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "cypress:coverage": "nyc --reporter=lcov --reporter=text-summary cypress run"
   },
   "private": true,
   "dependencies": {
@@ -42,14 +43,15 @@
     "@angular/cli": "14.2.1",
     "@angular/compiler-cli": "14.2.0",
     "@briebug/jest-schematic": "4.0.0",
-    "@cypress/code-coverage": "3.10.0",
+    "@cypress/code-coverage": "^3.12.47",
     "@cypress/schematic": "2.0.3",
     "@istanbuljs/nyc-config-typescript": "1.0.2",
     "@jsdevtools/coverage-istanbul-loader": "3.0.5",
     "@types/jest": "28.1.3",
     "@typescript-eslint/eslint-plugin": "5.35.1",
     "@typescript-eslint/parser": "5.35.1",
-    "cypress": "10.4.0",
+    "babel-plugin-istanbul": "^7.0.0",
+    "cypress": "^13.14.2",
     "eslint": "8.23.0",
     "istanbul-lib-coverage": "3.2.0",
     "jest": "28.1.3",

@@ -13,6 +13,7 @@ export default defineConfig({
       const setupPlugins = require('./cypress/plugins/index')
       return setupPlugins(on, config)
     },
+    testIsolation: false,
     baseUrl: 'http://localhost:4200',
   },
 })

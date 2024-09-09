@@ -92,9 +92,9 @@ public class UserControllerTest {
         User user = new User();
         user.setEmail("user@test.com");
 
-        when(userService.findById(4L)).thenReturn(user);
+        when(userService.findById(19L)).thenReturn(user);
 
-        mockMvc.perform(delete("/api/user/4")
+        mockMvc.perform(delete("/api/user/19")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -113,10 +113,10 @@ public class UserControllerTest {
     @Test
     public void save_UserUnauthorizedTest() throws Exception {
         User user = new User();
-        user.setEmail("user@test.com");
-        when(userService.findById(4L)).thenReturn(user);
+        user.setEmail("test@user.com");
+        when(userService.findById(5L)).thenReturn(user);
 
-        mockMvc.perform(delete("/api/user/4")
+        mockMvc.perform(delete("/api/user/5")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }

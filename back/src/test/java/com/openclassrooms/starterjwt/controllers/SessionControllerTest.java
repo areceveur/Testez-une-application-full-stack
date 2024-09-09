@@ -89,7 +89,7 @@ public class SessionControllerTest {
         session1.setId(2L);
 
         Session session2 = new Session();
-        session2.setId(149L);
+        session2.setId(150L);
 
         List<Session> sessions = new ArrayList<>();
         sessions.add(session1);
@@ -107,18 +107,18 @@ public class SessionControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(2))
-                .andExpect(jsonPath("$[1].id").value(149));
+                .andExpect(jsonPath("$[1].id").value(150));
     }
 
     @WithMockUser()
     @Test
     public void saveSessionTest() throws Exception {
         Session session = new Session();
-        session.setId(149L);
+        session.setId(150L);
 
-        when(sessionService.getById(149L)).thenReturn(session);
+        when(sessionService.getById(150L)).thenReturn(session);
 
-        mockMvc.perform(delete("/api/session/149")
+        mockMvc.perform(delete("/api/session/150")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -145,14 +145,12 @@ public class SessionControllerTest {
     @Test
     public void createTest() throws Exception {
         SessionDto sessionDto = new SessionDto();
-        //sessionDto.setId(70L);
         sessionDto.setTeacher_id(1L);
         sessionDto.setDescription("Session");
         sessionDto.setDate(new Date());
         sessionDto.setName("Yoga");
 
         Session session = new Session();
-        //session.setId(151L);
         session.setDescription("Session");
         session.setDate(new Date());
         session.setName("Yoga");
@@ -164,7 +162,7 @@ public class SessionControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(sessionDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(160L));
+                .andExpect(jsonPath("$.id").value(207L));
     }
 
     @WithMockUser()

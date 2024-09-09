@@ -14,7 +14,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -161,7 +160,7 @@ public class SessionServiceTest {
         assertNotNull(createdUser);
         assertNotNull(createdUser.getId());
 
-        sessionService.participate(createdSession.getId(), 4L);
+        sessionService.participate(createdSession.getId(), 5L);
     }
 
     @Test
@@ -205,7 +204,7 @@ public class SessionServiceTest {
     @Test
     public void noLongerParticipateTest() {
         Long id = 3L;
-        Long userId = 4L;
+        Long userId = 5L;
 
         User user = new User();
         user.setId(userId);
